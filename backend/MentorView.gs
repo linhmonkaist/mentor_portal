@@ -337,6 +337,14 @@ function loadMentees(token, asMentor) {
     MENTEE_VIEW_COLS.cv, MENTEE_VIEW_COLS.zalo, MENTEE_VIEW_COLS.registered];
   if (showAll) wanted.push(MENTEE_COLS.code);
   const data = readColumns_(sheet, [MENTEE_COLS.mentor, MENTEE_COLS.name, MENTEE_COLS.payment], wanted);
+  // Nếu tiêu đề cột R / V đang trống (chưa chạy setup) thì đọc thẳng theo vị trí cột.
+  const hmap = headerMap_(sheet);
+  const nRows = Math.max(0, sheet.getLastRow() - HEADER_ROW);
+  VIEW_BLANK_HEADER_DEFAULTS.forEach(function (p) {
+    if (hmap[p[1]] !== undefined || nRows < 1) return;
+    data.cols[p[1]] = sheet.getRange(HEADER_ROW + 1, letterToIndex_(p[0]) + 1, nRows, 1)
+      .getValues().map(function (r) { return r[0]; });
+  });
   const tz = SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone();
   const counts = {};
   VIEW_STATUSES.forEach(function (s) { counts[s] = 0; });

@@ -44,7 +44,7 @@ const MENTEE_COLS = {
   plan: 'Chương trình',
   payment: 'Payment',
   status: 'Trạng thái hiện tại',
-  holdUntil: 'Ngày bảo lưu đến'
+  holdUntil: 'Ngày hết hạn bảo lưu'
 };
 
 // Tên cột của tab mentor
@@ -104,7 +104,7 @@ const DEFAULT_CONFIG = {
   TIMEZONE: 'Asia/Ho_Chi_Minh',
   DRY_RUN: true,
   ADMIN_EMAILS: '',   // email admin/founder (cách nhau bằng dấu phẩy), dùng cho trang web mentor
-  FRONTEND_URL: ''    // URL giao diện (ví dụ https://tên.github.io/mentor_portal/), dùng cho nút đăng nhập trong email
+  FRONTEND_URL: 'https://linhmonkaist.github.io/mentor_portal/'    // URL giao diện (ví dụ https://tên.github.io/mentor_portal/), dùng cho nút đăng nhập trong email
 };
 
 const TYPE_DEADLINE = 'Deadline';
@@ -1033,7 +1033,7 @@ function testWithSampleData() {
 //    dán toàn bộ file này vào, bấm Lưu.
 // 2. Trong trình soạn thảo Apps Script, chọn hàm setup rồi bấm Chạy. Lần đầu Google sẽ hỏi cấp quyền
 //    (đọc/ghi bảng tính, gửi email, tạo trigger). Chọn tài khoản của bạn, bấm "Nâng cao" > "Đi tới ..." nếu có cảnh báo.
-//    setup() tạo tab Applications, Progress_Log, Reminders, Config và thêm cột "Ngày bảo lưu đến"
+//    setup() tạo tab Applications, Progress_Log, Reminders, Config và thêm cột "Ngày hết hạn bảo lưu"
 //    cùng "Trạng thái hiện tại" (nếu thiếu) ở tab mentee. Không sửa dữ liệu có sẵn.
 // 3. Mở tab Config, điền MANAGER_EMAIL (email của bạn). Các giá trị khác để mặc định cũng được:
 //    REMINDER_DAYS_BEFORE = 7, SEND_HOUR = 8, TIMEZONE = Asia/Ho_Chi_Minh, DRY_RUN = TRUE.

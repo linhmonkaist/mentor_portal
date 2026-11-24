@@ -337,7 +337,7 @@
     field(dl, 'Đăng ký', document.createTextNode(formatRegistered(m.registeredAt)));
     field(dl, 'Gói', document.createTextNode(m.plan || '—'));
     field(dl, 'Thanh toán cho mentor', document.createTextNode(m.payment || '—'), payClass(m.paymentGroup));
-    if (m.status === 'Bảo lưu') field(dl, 'Bảo lưu đến', document.createTextNode(m.holdUntil || '—'));
+    if (m.status === 'Bảo lưu') field(dl, 'Hết hạn bảo lưu', document.createTextNode(m.holdUntil || '—'));
     field(dl, 'Email', emailNode(m.email));
     field(dl, 'Zalo', zaloNode(m.zalo));
     field(dl, 'CV', linkOrText(m.cvUrl, 'Mở CV'));
