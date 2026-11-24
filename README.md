@@ -18,7 +18,7 @@ Mentor (trình duyệt)  ->  GitHub Pages (trang tĩnh này)  ->  API Apps Scrip
 
 ### 1. Backend (Google Sheet + Apps Script)
 1. Mở Google Sheet "[SEM DB] Mentor" > Tiện ích mở rộng > Apps Script.
-2. Dán ba file trong thư mục `backend/`: `Code.gs`, `MentorView.gs`, `Api.gs` (ba file riêng trong cùng dự án Apps Script).
+2. Mã Apps Script nằm ở repo private `mentor_portal_backend` (thư mục `src/`: `Code.gs`, `MentorView.gs`, `Api.gs`) và được tự động deploy bằng GitHub Actions.
 3. Chạy hàm `setup` một lần và cấp quyền. Hàm này tạo các tab còn thiếu, đặt tiêu đề "Link CV" cho cột R và "Zalo" cho cột V nếu đang trống, và thêm các dòng cấu hình vào tab `Config`.
 4. Trong tab `Config`, điền:
    - `ADMIN_EMAILS`: email của bạn (nhiều email cách nhau bằng dấu phẩy).
@@ -51,4 +51,4 @@ assets/config.js    API_URL
 docs/API.md         Đặc tả API
 ```
 
-(Thư mục `backend/` chứa mã Apps Script để tiện sao chép. Hai bản phải luôn giống nhau với bản đang chạy trong Sheet.)
+(Mã backend đã chuyển sang repo private `mentor_portal_backend`.)
