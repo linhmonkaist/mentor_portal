@@ -312,7 +312,6 @@
     if (m.status === 'Bảo lưu') field(dl, 'Bảo lưu đến', document.createTextNode(m.holdUntil || '—'));
     field(dl, 'Email', emailNode(m.email));
     field(dl, 'Zalo', zaloNode(m.zalo));
-    field(dl, 'Mạng xã hội', linkOrText(m.socialUrl, 'Mở link'));
     field(dl, 'CV', linkOrText(m.cvUrl, 'Mở CV'));
     card.appendChild(dl);
     return card;

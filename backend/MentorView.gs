@@ -6,18 +6,17 @@
  * - Nhận email có nút "Đăng nhập" (trỏ về FRONTEND_URL) và mã 6 số dự phòng.
  * - Thiết bị được nhớ 30 ngày. Menu "SEM Scholars > Đăng xuất mọi thiết bị" thu hồi tất cả phiên.
  *
- * MENTOR thấy: tên, email, gói, thanh toán cho mentor (cột Payment), link MXH, link CV, số Zalo
+ * MENTOR thấy: tên, email, gói, thanh toán cho mentor (cột Payment), link CV, số Zalo
  *   của mentee mình phụ trách. KHÔNG thấy: Code, số tiền đã đóng, hình thức thanh toán của mentee.
  * ADMIN (email trong ADMIN_EMAILS): xem toàn bộ mentee (kèm Code và tên mentor), hoặc chọn một
  *   mentor để xem đúng như mentor đó thấy (chỉ xem).
  */
 
 const MENTEE_VIEW_COLS = {
-  social: 'Link MXH',   // cột O (setup() tự đặt tên nếu ô tiêu đề đang trống)
-  cv: 'Link CV',        // cột R
-  zalo: 'Zalo'          // tùy chọn: nếu không có cột này, tìm số Zalo trong ô "Link MXH"
+  cv: 'Link CV',   // cột R (setup() tự đặt tên nếu ô tiêu đề đang trống)
+  zalo: 'Zalo'     // cột V (setup() tự đặt tên nếu ô tiêu đề đang trống)
 };
-const VIEW_BLANK_HEADER_DEFAULTS = [['O', 'Link MXH'], ['R', 'Link CV']];
+const VIEW_BLANK_HEADER_DEFAULTS = [['R', 'Link CV'], ['V', 'Zalo']];
 
 const OTP_TTL_SEC = 600;
 const SESSION_DAYS = 30;
@@ -47,13 +46,11 @@ function validEmailFormat_(e) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 }
 
-/** Lấy số điện thoại từ đoạn chữ có chứa "Zalo". Trả về các số, cách nhau " / ". */
-function extractZalo_(text) {
-  const s = String(text === null || text === undefined ? '' : text);
-  if (!/zalo/i.test(s)) return '';
-  const compact = s.replace(/[.\s]/g, '');
-  const found = compact.match(/(?:\+84|84|0)\d{8,10}/g);
-  return found ? found.join(' / ') : '';
+/** Số Zalo từ ô sheet. Ô dạng số sẽ mất số 0 đầu (889141747), nên thêm lại cho số 9 chữ số. */
+function normalizeZalo_(v) {
+  const s = String(v === null || v === undefined ? '' : v).trim();
+  if (/^\d{9}$/.test(s)) return '0' + s;
+  return s;
 }
 
 /** Nhóm thanh toán cho mentor: unpaid (trống), installment1 (Đợt 1), done (Done/Thưởng), other. */
@@ -308,7 +305,7 @@ function loadMentees(token, asMentor) {
 
   const sheet = mustSheet_(SHEET_MENTEE);
   const wanted = [MENTEE_COLS.email, MENTEE_COLS.plan, MENTEE_COLS.status, MENTEE_COLS.holdUntil,
-    MENTEE_VIEW_COLS.social, MENTEE_VIEW_COLS.cv, MENTEE_VIEW_COLS.zalo];
+    MENTEE_VIEW_COLS.cv, MENTEE_VIEW_COLS.zalo];
   if (showAll) wanted.push(MENTEE_COLS.code);
   const data = readColumns_(sheet, [MENTEE_COLS.mentor, MENTEE_COLS.name, MENTEE_COLS.payment], wanted);
   const tz = SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone();
@@ -327,9 +324,7 @@ function loadMentees(token, asMentor) {
     }
     const status = getEnrollmentStatus_(data.cols[MENTEE_COLS.status][i], data.cols[MENTEE_COLS.payment][i]);
     const pay = String(data.cols[MENTEE_COLS.payment][i] || '').trim();
-    const social = String(data.cols[MENTEE_VIEW_COLS.social][i] || '').trim();
-    let zalo = String(data.cols[MENTEE_VIEW_COLS.zalo][i] || '').trim();
-    if (!zalo) zalo = extractZalo_(social);
+    const zalo = normalizeZalo_(data.cols[MENTEE_VIEW_COLS.zalo][i]);
     let hold = '';
     if (status === 'Bảo lưu') {
       const k = dayKey_(data.cols[MENTEE_COLS.holdUntil][i], tz);
@@ -345,7 +340,6 @@ function loadMentees(token, asMentor) {
       payment: pay || NO_PAYMENT_LABEL,
       paymentGroup: pgroup,
       status: status,
-      social: social,
       cv: String(data.cols[MENTEE_VIEW_COLS.cv][i] || '').trim(),
       zalo: zalo,
       holdUntil: hold

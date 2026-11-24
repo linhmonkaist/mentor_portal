@@ -60,9 +60,8 @@ Phản hồi giống `verifyCode`. Link dùng một lần, hết hạn sau 10 ph
     "paymentGroup": "installment1",
     "status": "Active",
     "holdUntil": "",
-    "socialUrl": "https://facebook.com/…",
     "cvUrl": "https://drive.google.com/…",
-    "zalo": "0889141747 / 0904408893"
+    "zalo": "0889141747"
   }]
 } }
 ```
@@ -70,6 +69,7 @@ Phản hồi giống `verifyCode`. Link dùng một lần, hết hạn sau 10 ph
 - `paymentGroup`: `unpaid` (trống), `installment1` (Đợt 1), `done` (Done/Thưởng), `other`.
 - `status`: `Active`, `Bảo lưu`, `Hoàn thành`, `Hủy`.
 - `holdUntil`: chỉ có giá trị khi `status` là `Bảo lưu`.
+- `cvUrl` lấy từ cột "Link CV" (cột R), `zalo` lấy từ cột "Zalo" (cột V). Link mạng xã hội của mentee không có trong API.
 - `activePayment`: số mentee Active theo nhóm thanh toán (dùng cho chip lọc).
 - Mentor chỉ nhận mentee của mình, không có `code`, không có số tiền, không có hình thức thanh toán của mentee.
 - `role: "admin"` (email trong `ADMIN_EMAILS`):

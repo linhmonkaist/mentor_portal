@@ -8,7 +8,7 @@ Mentor (trình duyệt)  ->  GitHub Pages (trang tĩnh này)  ->  API Apps Scrip
 
 ## Mentor thấy gì
 - Mentee của mình theo trạng thái: Active, Bảo lưu, Hoàn thành, Hủy.
-- Mỗi mentee: tên, email, gói, thanh toán cho mentor, link mạng xã hội, link CV, số Zalo.
+- Mỗi mentee: tên, email, gói, thanh toán cho mentor, link CV (cột R), số Zalo (cột V). Không có link mạng xã hội.
 - Trong tab Active có bộ lọc "Chưa thanh toán" và "Đợt 1" (thanh toán cho mentor).
 - Không thấy: Code, số tiền mentee đã đóng, hình thức thanh toán của mentee.
 - Admin (email trong `ADMIN_EMAILS`): xem toàn bộ, hoặc chọn "Xem như mentor: …" để kiểm tra giao diện của một mentor (chỉ xem).
@@ -18,7 +18,7 @@ Mentor (trình duyệt)  ->  GitHub Pages (trang tĩnh này)  ->  API Apps Scrip
 ### 1. Backend (Google Sheet + Apps Script)
 1. Mở Google Sheet "[SEM DB] Mentor" > Tiện ích mở rộng > Apps Script.
 2. Dán ba file trong thư mục `backend/`: `Code.gs`, `MentorView.gs`, `Api.gs` (ba file riêng trong cùng dự án Apps Script).
-3. Chạy hàm `setup` một lần và cấp quyền. Hàm này tạo các tab còn thiếu, đặt tiêu đề "Link MXH" và "Link CV" cho cột O và R nếu đang trống, và thêm các dòng cấu hình vào tab `Config`.
+3. Chạy hàm `setup` một lần và cấp quyền. Hàm này tạo các tab còn thiếu, đặt tiêu đề "Link CV" cho cột R và "Zalo" cho cột V nếu đang trống, và thêm các dòng cấu hình vào tab `Config`.
 4. Trong tab `Config`, điền:
    - `ADMIN_EMAILS`: email của bạn (nhiều email cách nhau bằng dấu phẩy).
    - `FRONTEND_URL`: URL trang này, ví dụ `https://linhmonkaist.github.io/mentor_portal/`.

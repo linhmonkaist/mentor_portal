@@ -98,7 +98,6 @@ function apiMenteesPayload_(v) {
         paymentGroup: r.paymentGroup,
         status: r.status,
         holdUntil: r.holdUntil,
-        socialUrl: r.social,
         cvUrl: r.cv,
         zalo: r.zalo
       };
