@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src https://script.google.com https://script.googleusercontent.com; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+  <title>SEM Scholars | Cổng mentor</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">SEM Scholars <span>Cổng mentor</span></div>
+    <div class="userbox hidden" id="userbox">
+      <span class="who" id="who"></span>
+      <span class="badge" id="roleBadge"></span>
+      <button class="btn ghost" id="logoutBtn" type="button">Đăng xuất</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <!-- Đăng nhập -->
+    <section id="viewLogin" class="card narrow hidden">
+      <h1>Đăng nhập</h1>
+      <p class="muted">Nhập email bạn đã đăng ký với SEM Scholars. Chúng tôi sẽ gửi email có nút đăng nhập và mã 6 số.</p>
+      <form id="emailForm" autocomplete="on">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="email@gmail.com" required>
+        <button class="btn" id="sendBtn" type="submit">Gửi email đăng nhập</button>
+      </form>
+      <form id="codeForm" class="hidden" autocomplete="one-time-code">
+        <p class="notice" id="sentNotice"></p>
+        <label for="code">Mã 6 số trong email</label>
+        <input id="code" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="123456" required>
+        <div class="row">
+          <button class="btn" id="verifyBtn" type="submit">Đăng nhập</button>
+          <button class="btn ghost" id="backBtn" type="button">Đổi email</button>
+        </div>
+      </form>
+      <p class="error" id="loginError" role="alert"></p>
+    </section>
+
+    <!-- Xác nhận từ nút trong email -->
+    <section id="viewConfirm" class="card narrow hidden">
+      <h1>Xác nhận đăng nhập</h1>
+      <p class="muted">Bấm nút bên dưới để hoàn tất đăng nhập trên thiết bị này.</p>
+      <button class="btn" id="confirmBtn" type="button">Xác nhận đăng nhập</button>
+      <button class="btn ghost" id="confirmCancel" type="button">Hủy</button>
+      <p class="error" id="confirmError" role="alert"></p>
+    </section>
+
+    <!-- Danh sách mentee -->
+    <section id="viewApp" class="hidden">
+      <div class="adminbar hidden" id="adminBar">
+        <label for="asSelect">Chế độ xem</label>
+        <select id="asSelect"></select>
+      </div>
+      <div class="banner hidden" id="banner"></div>
+
+      <div class="toolbar">
+        <div class="tabs" id="tabs" role="tablist" aria-label="Trạng thái mentee"></div>
+        <input id="search" type="search" placeholder="Tìm theo tên hoặc email" aria-label="Tìm mentee">
+      </div>
+
+      <div class="chips hidden" id="payChips" aria-label="Lọc theo thanh toán cho mentor"></div>
+
+      <p class="muted" id="summary"></p>
+      <div id="list" class="grid"></div>
+    </section>
+
+    <section id="viewLoading" class="card narrow hidden"><p class="muted">Đang tải…</p></section>
+    <section id="viewConfig" class="card narrow hidden">
+      <h1>Chưa cấu hình</h1>
+      <p>Mở <code>assets/config.js</code> và điền <code>API_URL</code> (URL ứng dụng web của Apps Script, đuôi <code>/exec</code>).</p>
+    </section>
+  </main>
+
+  <script src="assets/config.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
