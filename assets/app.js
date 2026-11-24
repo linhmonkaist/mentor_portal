@@ -16,6 +16,7 @@
     status: 'Active',
     pay: { unpaid: false, installment1: false },
     query: '',
+    sort: 'newest',
     asMentor: '',
     linkToken: '',
     email: ''
@@ -287,7 +288,33 @@
       if (state.status === 'Active' && anyPay && !state.pay[m.paymentGroup]) return false;
       if (q && m.name.toLowerCase().indexOf(q) < 0 && String(m.email || '').toLowerCase().indexOf(q) < 0) return false;
       return true;
-    });
+    }).sort(compareMentees);
+  }
+
+  // Mentee không có thời gian đăng ký được coi là đăng ký từ trước khi cập nhật DB (cũ nhất).
+  var LEGACY_LABEL = 'Trước khi cập nhật DB';
+  var dateFmt = null;
+  function formatRegistered(iso) {
+    if (!iso) return LEGACY_LABEL;
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return LEGACY_LABEL;
+    try {
+      if (!dateFmt) dateFmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+      var p = {};
+      dateFmt.formatToParts(d).forEach(function (x) { p[x.type] = x.value; });
+      return p.day + '/' + p.month + '/' + p.year + ' ' + (p.hour === '24' ? '00' : p.hour) + ':' + p.minute;
+    } catch (e) { return iso.slice(0, 10); }
+  }
+
+  function compareMentees(a, b) {
+    if (state.sort !== 'name') {
+      var ra = a.registeredAt || '', rb = b.registeredAt || '';
+      if (ra !== rb) {
+        var cmp = ra < rb ? -1 : 1; // chuỗi ISO UTC so sánh được; chuỗi rỗng (cũ) nhỏ nhất
+        return state.sort === 'newest' ? -cmp : cmp;
+      }
+    }
+    return String(a.name).localeCompare(String(b.name), 'vi');
   }
 
   function payClass(group) {
@@ -307,6 +334,7 @@
       field(dl, 'Code', document.createTextNode(m.code || '—'));
       field(dl, 'Mentor', document.createTextNode(m.mentorText || '—'));
     }
+    field(dl, 'Đăng ký', document.createTextNode(formatRegistered(m.registeredAt)));
     field(dl, 'Gói', document.createTextNode(m.plan || '—'));
     field(dl, 'Thanh toán cho mentor', document.createTextNode(m.payment || '—'), payClass(m.paymentGroup));
     if (m.status === 'Bảo lưu') field(dl, 'Bảo lưu đến', document.createTextNode(m.holdUntil || '—'));
@@ -359,6 +387,7 @@
     $('confirmCancel').addEventListener('click', function () { state.linkToken = ''; showLogin(''); });
     $('logoutBtn').addEventListener('click', onLogout);
     $('asSelect').addEventListener('change', function (ev) { state.asMentor = ev.target.value; loadMentees(); });
+    $('sortSelect').addEventListener('change', function (ev) { state.sort = ev.target.value; if (state.data) renderList(); });
     $('search').addEventListener('input', function (ev) { state.query = ev.target.value; if (state.data) renderList(); });
 
     state.linkToken = readLinkFromHash();

@@ -62,7 +62,14 @@
 
       <div class="toolbar">
         <div class="tabs" id="tabs" role="tablist" aria-label="Trạng thái mentee"></div>
-        <input id="search" type="search" placeholder="Tìm theo tên hoặc email" aria-label="Tìm mentee">
+        <div class="filters">
+          <input id="search" type="search" placeholder="Tìm theo tên hoặc email" aria-label="Tìm mentee">
+          <select id="sortSelect" aria-label="Sắp xếp">
+            <option value="newest">Đăng ký mới nhất</option>
+            <option value="oldest">Đăng ký cũ nhất</option>
+            <option value="name">Tên A → Z</option>
+          </select>
+        </div>
       </div>
 
       <div class="chips hidden" id="payChips" aria-label="Lọc theo thanh toán cho mentor"></div>

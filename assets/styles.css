@@ -66,7 +66,12 @@ input:focus, select:focus, .btn:focus-visible, .tab:focus-visible, .chip:focus-v
   padding: 8px 12px; margin-bottom: 10px; font-size: 14px;
 }
 .toolbar { display: grid; gap: 10px; margin-bottom: 8px; }
-@media (min-width: 720px) { .toolbar { grid-template-columns: 1fr 280px; align-items: center; } }
+.filters { display: grid; gap: 8px; grid-template-columns: 1fr; }
+@media (min-width: 720px) {
+  .toolbar { grid-template-columns: 1fr 460px; align-items: center; }
+  .filters { grid-template-columns: 1fr 190px; }
+}
+.filters input, .filters select { margin: 0; }
 .tabs, .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chips { margin: 4px 0 8px; }
 .tab, .chip {

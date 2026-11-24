@@ -61,13 +61,15 @@ Phản hồi giống `verifyCode`. Link dùng một lần, hết hạn sau 10 ph
     "status": "Active",
     "holdUntil": "",
     "cvUrl": "https://drive.google.com/…",
-    "zalo": "0889141747"
+    "zalo": "0889141747",
+    "registeredAt": "2026-01-05T02:00:00.000Z"
   }]
 } }
 ```
 - `payment`: thanh toán **cho mentor** (cột Payment của sheet). Ô trống hiện là `"Chưa thanh toán"`.
 - `paymentGroup`: `unpaid` (trống), `installment1` (Đợt 1), `done` (Done/Thưởng), `other`.
 - `status`: `Active`, `Bảo lưu`, `Hoàn thành`, `Hủy`.
+- `registeredAt`: thời gian đăng ký (cột Timestamp của sheet) dạng ISO UTC; chuỗi rỗng nghĩa là mentee đăng ký trước khi cập nhật DB (coi là cũ nhất). Frontend sắp xếp và hiển thị theo giờ Việt Nam.
 - `holdUntil`: chỉ có giá trị khi `status` là `Bảo lưu`.
 - `cvUrl` lấy từ cột "Link CV" (cột R), `zalo` lấy từ cột "Zalo" (cột V). Link mạng xã hội của mentee không có trong API.
 - `activePayment`: số mentee Active theo nhóm thanh toán (dùng cho chip lọc).

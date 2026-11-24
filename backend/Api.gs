@@ -99,7 +99,8 @@ function apiMenteesPayload_(v) {
         status: r.status,
         holdUntil: r.holdUntil,
         cvUrl: r.cv,
-        zalo: r.zalo
+        zalo: r.zalo,
+        registeredAt: r.registeredAt
       };
       if (r.code !== undefined) { m.code = r.code; m.mentorText = r.mentorText; }
       return m;

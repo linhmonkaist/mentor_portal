@@ -8,7 +8,8 @@ Mentor (trình duyệt)  ->  GitHub Pages (trang tĩnh này)  ->  API Apps Scrip
 
 ## Mentor thấy gì
 - Mentee của mình theo trạng thái: Active, Bảo lưu, Hoàn thành, Hủy.
-- Mỗi mentee: tên, email, gói, thanh toán cho mentor, link CV (cột R), số Zalo (cột V). Không có link mạng xã hội.
+- Mỗi mentee: tên, email, gói, thanh toán cho mentor, link CV (cột R), số Zalo (cột V), thời gian đăng ký (cột Timestamp). Không có link mạng xã hội.
+- Sắp xếp theo thời gian đăng ký (mới nhất, cũ nhất) hoặc theo tên. Mentee không có thời gian đăng ký được coi là đăng ký từ trước khi cập nhật DB, hiện "Trước khi cập nhật DB" và xếp là cũ nhất.
 - Trong tab Active có bộ lọc "Chưa thanh toán" và "Đợt 1" (thanh toán cho mentor).
 - Không thấy: Code, số tiền mentee đã đóng, hình thức thanh toán của mentee.
 - Admin (email trong `ADMIN_EMAILS`): xem toàn bộ, hoặc chọn "Xem như mentor: …" để kiểm tra giao diện của một mentor (chỉ xem).

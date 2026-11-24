@@ -13,8 +13,9 @@
  */
 
 const MENTEE_VIEW_COLS = {
-  cv: 'Link CV',   // cột R (setup() tự đặt tên nếu ô tiêu đề đang trống)
-  zalo: 'Zalo'     // cột V (setup() tự đặt tên nếu ô tiêu đề đang trống)
+  cv: 'Link CV',            // cột R (setup() tự đặt tên nếu ô tiêu đề đang trống)
+  zalo: 'Zalo',             // cột V (setup() tự đặt tên nếu ô tiêu đề đang trống)
+  registered: 'Timestamp'   // thời gian đăng ký (cột C). Ô trống = đăng ký trước khi cập nhật DB
 };
 const VIEW_BLANK_HEADER_DEFAULTS = [['R', 'Link CV'], ['V', 'Zalo']];
 
@@ -51,6 +52,34 @@ function normalizeZalo_(v) {
   const s = String(v === null || v === undefined ? '' : v).trim();
   if (/^\d{9}$/.test(s)) return '0' + s;
   return s;
+}
+
+/**
+ * Thời gian đăng ký thành chuỗi ISO UTC (để sắp xếp được bằng so sánh chuỗi). Trả về '' nếu ô trống hoặc không hiểu.
+ * Date: dùng trực tiếp. Chuỗi: nhận dd/MM/yyyy HH:mm(:ss) hoặc yyyy-MM-dd HH:mm(:ss) (hoặc chỉ ngày),
+ * hiểu theo múi giờ của bảng tính.
+ */
+function parseRegisteredAt_(v, sheetTz) {
+  if (v === null || v === undefined || v === '') return '';
+  if (Object.prototype.toString.call(v) === '[object Date]') {
+    return isNaN(v.getTime()) ? '' : v.toISOString();
+  }
+  const s = String(v).trim();
+  let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?$/);
+  let y, mo, d, h, mi, se;
+  if (m) { d = +m[1]; mo = +m[2]; y = +m[3]; h = +(m[4] || 0); mi = +(m[5] || 0); se = +(m[6] || 0); }
+  else {
+    m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?$/);
+    if (!m) return '';
+    y = +m[1]; mo = +m[2]; d = +m[3]; h = +(m[4] || 0); mi = +(m[5] || 0); se = +(m[6] || 0);
+  }
+  if (mo < 1 || mo > 12 || d < 1 || d > 31 || h > 23 || mi > 59 || se > 59) return '';
+  const guess = new Date(Date.UTC(y, mo - 1, d, h, mi, se));
+  if (isNaN(guess.getTime()) || guess.getUTCMonth() !== mo - 1) return '';
+  const off = Utilities.formatDate(guess, sheetTz, 'Z'); // ví dụ +0700
+  const sign = off.charAt(0) === '-' ? -1 : 1;
+  const minutes = sign * (Number(off.slice(1, 3)) * 60 + Number(off.slice(3, 5)));
+  return new Date(guess.getTime() - minutes * 60000).toISOString();
 }
 
 /** Nhóm thanh toán cho mentor: unpaid (trống), installment1 (Đợt 1), done (Done/Thưởng), other. */
@@ -305,7 +334,7 @@ function loadMentees(token, asMentor) {
 
   const sheet = mustSheet_(SHEET_MENTEE);
   const wanted = [MENTEE_COLS.email, MENTEE_COLS.plan, MENTEE_COLS.status, MENTEE_COLS.holdUntil,
-    MENTEE_VIEW_COLS.cv, MENTEE_VIEW_COLS.zalo];
+    MENTEE_VIEW_COLS.cv, MENTEE_VIEW_COLS.zalo, MENTEE_VIEW_COLS.registered];
   if (showAll) wanted.push(MENTEE_COLS.code);
   const data = readColumns_(sheet, [MENTEE_COLS.mentor, MENTEE_COLS.name, MENTEE_COLS.payment], wanted);
   const tz = SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone();
@@ -342,6 +371,7 @@ function loadMentees(token, asMentor) {
       status: status,
       cv: String(data.cols[MENTEE_VIEW_COLS.cv][i] || '').trim(),
       zalo: zalo,
+      registeredAt: parseRegisteredAt_(data.cols[MENTEE_VIEW_COLS.registered][i], tz),
       holdUntil: hold
     };
     if (showAll) {
