@@ -28,6 +28,10 @@ body {
 .userbox { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; }
 .who { opacity: .9; word-break: break-all; }
 .badge { background: rgba(255,255,255,.18); padding: 2px 8px; border-radius: 999px; font-size: 12px; }
+.disclaimer {
+  background: var(--warn-bg); border-bottom: 1px solid var(--warn-line); color: #5b4a00;
+  padding: 8px 16px; font-size: 13px; text-align: center;
+}
 .container { max-width: 1000px; margin: 0 auto; padding: 16px; }
 .card {
   background: var(--card); border-radius: var(--radius); padding: 20px;
